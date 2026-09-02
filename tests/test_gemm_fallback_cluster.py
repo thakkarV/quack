@@ -54,12 +54,15 @@ CONFIGS = [
     (128, 256, 1, 2),  # 1-CTA MMA, fallback (1,1), rem_n path
     (64, 256, 2, 1),  # 1-CTA MMA, fallback (1,1), rem_m path
 ]
-# Forced-path only (launches at the size-2 fallback, never a size-4 cluster):
+# Forced-path only (launches at the size-2 fallback, never a size-4/8 cluster):
 # 2-CTA MMA whose fallback keeps the pair — per-shape A multicast atoms, the
-# pair's SFB/B 2SM atoms, and the pair-intact sched pipeline.
+# pair's SFB/B 2SM atoms, and the pair-intact sched pipeline. The size-8 shapes
+# are in the SM100 autotune sweep (gemm_config._get_sm100_configs, CLC only).
 FORCED_CONFIGS = CONFIGS + [
     (128, 256, 2, 2),  # 2-CTA MMA, fallback (2,1), rem_n path
     (256, 128, 4, 1),  # 2-CTA MMA, fallback (2,1), rem_m path (pair offset 2)
+    (256, 256, 4, 2),  # 2-CTA MMA, fallback (2,1), rem_m + rem_n (size 8)
+    (256, 256, 2, 4),  # 2-CTA MMA, fallback (2,1), rem_n path (size 8)
 ]
 
 
